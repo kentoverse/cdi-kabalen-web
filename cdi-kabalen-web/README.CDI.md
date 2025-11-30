@@ -166,6 +166,7 @@ The next evolution of the Kabalen site introduces a CSV-powered content flow so 
 - Open `content/content-template.csv` in Excel, Numbers, or Google Sheets.
 - Each row represents a section or card on a specific page.
 - Update the columns:
+  - **business**: brand identifier (e.g., `kabalian`); leave blank to share across all brands.
   - **page**: logical page key (e.g., `index`, `menu`).
   - **section**: stable identifier for anchors or styling hooks.
   - **title / subtitle / content**: textual copy.
@@ -178,14 +179,19 @@ The next evolution of the Kabalen site introduces a CSV-powered content flow so 
 ### Generating Pages
 
 - Save the CSV.
-- Run the generator from the project root:
+- Run the generator from the project root (the `--business` flag is optional when previewing a single brand):
 
   ```bash
-  python3 generate_pages.py content/content-template.csv --output generated-pages
+  python3 generate_pages.py content/content-template.csv --business kabalian --output generated-pages
   ```
 
-- Updated HTML files appear in `generated-pages/` for review before publishing.
-- Copy approved files into the root directory (or adjust deployment to pull from `generated-pages/`).
+- The helper script `scripts/build_variants.py` automates both Azure and GCP builds in one pass:
+
+  ```bash
+  python3 scripts/build_variants.py --business kabalian
+  ```
+
+- Generated HTML bundles land under `build/azure/<business>` and `build/gcp/<business>` and contain `content.json` plus the copied `assets/` directory.
 
 ### Image Slot Placeholders
 
@@ -194,6 +200,75 @@ The next evolution of the Kabalen site introduces a CSV-powered content flow so 
 - Upload new images to `assets/images/` and reference the path in the CSV when ready.
 
 This workflow enables a light CMS experience while the project transitions toward a fully dynamic FastAPI stack.
+
+---
+
+## ⚙️ FastAPI Content Service
+
+The `/api` package introduces a FastAPI microservice that mirrors the CSV authoring model for downstream consumers.
+
+### Running the API locally
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn api.main:app --reload
+```
+
+- `GET /healthz` → basic uptime probe.
+- `GET /pages` → returns the full sitemap with sections grouped by HTML filename.
+- `GET /pages/{page}` → fetch the sections for a specific page (`index` or `index.html`).
+- `GET /pages/{page}/sections/{section}` → pull a single section payload, useful for CMS previews.
+
+The API lazily caches `content/content-template.csv` and automatically reloads when the file timestamp changes.
+
+---
+
+## 🔁 Build & Deploy Pipeline
+
+### 1. Generate Azure + GCP bundles
+
+```bash
+python3 scripts/build_variants.py --business kabalian
+```
+
+Artifacts:
+
+- `build/azure/kabalian` → HTML + assets + `content.json` for Azure Static Website.
+- `build/gcp/kabalian` → identical bundle for Firebase Hosting.
+
+### 2. Publish to Azure Static Web Apps (Blob `$web`)
+
+```bash
+CONTENT_BUSINESS=kabalian ./scripts/deploy_to_storage.sh
+```
+
+Requirements:
+
+- Azure CLI authenticated with access to subscription `17564e57-40b0-434d-b566-604c60cee028`.
+- `artifacts/azure/env.prod` populated with storage account metadata (`CONTENT_BUSINESS` defaults to `kabalian`).
+
+The script rebuilds the bundles if necessary, optionally switches subscriptions, and syncs the Azure bundle into the `$web` container of `kabalenstaticstore`.
+
+### 3. Publish to GCP Firebase Hosting
+
+```bash
+CONTENT_BUSINESS=kabalian FIREBASE_PROJECT=<gcp-project-id> ./scripts/deploy_to_firebase.sh
+```
+
+Expectations:
+
+- Firebase CLI (`firebase-tools`) installed and authenticated for the target project.
+- The script regenerates `firebase.json` so the hosting `public` path matches `build/gcp/<business>` before calling `firebase deploy --only hosting`.
+- Authentication can be supplied with a service-account JSON:
+
+  ```bash
+  export GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/firebase-adminsdk.json
+  firebase login:ci --no-localhost
+  ```
+
+- Alternatively, activate the service account with `gcloud auth activate-service-account --key-file "$GOOGLE_APPLICATION_CREDENTIALS"` prior to running the deploy script.
 
 ---
 
@@ -228,6 +303,32 @@ Upcoming topics for backend development:
 - SQLite data modeling
 - API development
 - Server-side rendering
+
+---
+
+## 🧱 Next Build Plan – CSV to FastAPI Bridge
+
+The upcoming build focuses on turning the CSV authoring workflow into a repeatable build pipeline.
+
+### Sprint Goals
+
+- Ship a FastAPI microservice that reads the CSV and serves JSON endpoints for each page.
+- Add a build script that transforms CSV → JSON → Static HTML so non-technical editors only touch `content/content-template.csv`.
+- Automate Azure Blob deployments by bundling the generator run and `az storage blob upload-batch` commands into a single task.
+
+### Deliverables
+
+- `/api` folder with FastAPI app, Pydantic models, and CSV adapter.
+- `package.json` or `pyproject.toml` entries to run `python3 generate_pages.py` before deployment.
+- Updated GitHub Actions (or local script) that publishes generated HTML to `$web` and invalidates cached assets if needed.
+
+### Acceptance Criteria
+
+- Running one command should regenerate HTML, produce JSON previews, and push to Azure when credentials are provided.
+- Documentation includes a flow diagram showing CSV editors how updates propagate to production.
+- Tests cover CSV parsing edge cases (missing columns, hidden sections, image placeholders).
+
+This plan keeps the CSV-first governance intact while laying the groundwork for a FastAPI-powered CMS experience.
 
 ---
 

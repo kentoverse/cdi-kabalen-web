@@ -1,3 +1,9 @@
-page,section,title,subtitle,content,image,display,order,content_type,filename
-index,hero,"Welcome to Kabalen","Authentic Filipino flavors in Toronto","Introduce the restaurant and highlight key offerings.","assets/images/hero.jpg",true,1,hero,index.html
-menu,signature-dishes,"Signature Dishes","Customer favorites","Describe the most popular dishes with short descriptions.","assets/images/signature-1.jpg",true,1,card,menu.html
+business,page,section,title,subtitle,content,image,display,order,content_type,filename
+kabalian,index,hero,Experience Kabalen,Authentic Filipino Cuisine,"Indulge in home-style Filipino cooking, Kamayan feasts, and regional specialties prepared daily.",assets/images/hero.jpg,true,1,hero,index.html
+kabalian,index,cta,Book a Table,,"Reserve your Kamayan feast or family dinner with our online reservation form.",,true,2,callout,index.html
+kabalian,menu,featured,Chef Specials,,"Seasonal dishes sourced from local markets, featuring grilled seafood and sizzling platters.",,true,1,card,menu.html
+kabalian,menu,classic,Classic Favorites,,"Enjoy adobo, kare-kare, sisig, and more timeless Filipino favorites, made from scratch daily.",,true,2,card,menu.html
+kabalian,specials,daily,Today’s Feature,,"Ask about our rotating turo-turo trays packed with freshly prepared viands and desserts.",,true,1,card,specials.html
+kabalian,gallery,kamayan,Kamayan Feast Highlights,,"Feast with friends and family — no utensils required for this communal dining experience.",assets/images/hero-web.jpg,true,1,gallery-item,gallery.html
+kabalian,about,story,Our Story,,"Kabalen brings Pampanga’s culinary heritage to Bathurst & Wilson, celebrating Filipino hospitality.",,true,1,text,about.html
+kabalian,contact,visit,Visit Us,,"We’re open daily with extended weekend hours for Kamayan dinners and private celebrations.",,true,1,text,contact.html

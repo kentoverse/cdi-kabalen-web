@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "build/gcp/kabalian",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

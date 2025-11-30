@@ -1,18 +1,37 @@
+#!/usr/bin/env python3
+"""Convert CSV-authored content into structured JSON and static HTML pages."""
+
 from __future__ import annotations
 
 import argparse
 import csv
-import html
-from dataclasses import dataclass, field
+import json
+from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import Dict, Iterable, List
+from typing import Dict, Iterable, List, Optional, Tuple
 
-IMAGE_CONTENT_TYPES = {"image", "gallery", "gallery-item"}
+DEFAULT_PAGE_TITLES: Dict[str, str] = {
+    "index.html": "Kabalen Toronto – Home",
+    "menu.html": "Kabalen – Menu",
+    "specials.html": "Kabalen – Daily Specials",
+    "gallery.html": "Kabalen – Gallery",
+    "about.html": "Kabalen – Our Story",
+    "contact.html": "Kabalen – Contact"
+}
+
+NAVIGATION_LINKS: Tuple[Tuple[str, str], ...] = (
+    ("index.html", "Home"),
+    ("menu.html", "Menu"),
+    ("specials.html", "Specials"),
+    ("gallery.html", "Gallery"),
+    ("about.html", "About"),
+    ("contact.html", "Contact"),
+)
 
 
-@dataclass(order=True)
-class ContentBlock:
-    sort_index: int = field(init=False, repr=False)
+@dataclass
+class Section:
+    business: str
     page: str
     section: str
     title: str
@@ -24,198 +43,218 @@ class ContentBlock:
     content_type: str
     filename: str
 
-    def __post_init__(self) -> None:
-        self.sort_index = self.order
-        if not self.filename:
-            self.filename = f"{self.page}.html"
-        if not self.content_type:
-            self.content_type = "section"
-        self.page = self.page.strip() if self.page else ""
-        self.section = self.section.strip() if self.section else ""
+    @classmethod
+    def from_row(cls, row: Dict[str, str]) -> "Section":
+        display_value = row.get("display", "true").strip().lower()
+        display = display_value in {"1", "true", "yes", "y"}
+        order_value = row.get("order", "0").strip()
+        try:
+            order = int(order_value)
+        except ValueError:
+            order = 0
+
+        filename = row.get("filename") or f"{row.get('page', '').strip()}.html"
+
+        return cls(
+            business=row.get("business", "").strip() or "default",
+            page=row.get("page", "").strip(),
+            section=row.get("section", "").strip(),
+            title=row.get("title", "").strip(),
+            subtitle=row.get("subtitle", "").strip(),
+            content=row.get("content", "").strip(),
+            image=row.get("image", "").strip(),
+            display=display,
+            order=order,
+            content_type=row.get("content_type", "text").strip().lower() or "text",
+            filename=filename.strip() if filename else "index.html",
+        )
 
 
-def parse_bool(value: str) -> bool:
-    if isinstance(value, bool):
-        return value
-    lowered = (value or "").strip().lower()
-    return lowered in {"true", "1", "yes", "y"}
-
-
-def load_blocks(csv_path: Path) -> List[ContentBlock]:
-    blocks: List[ContentBlock] = []
+def parse_sections(csv_path: Path, business: Optional[str] = None) -> Dict[str, List[Section]]:
+    sections: Dict[str, List[Section]] = {}
     with csv_path.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
-            if not row:
+            section = Section.from_row(row)
+            if not section.display:
                 continue
+            if business:
+                business_key = business.lower()
+                section_key = section.business.lower()
+                if section_key not in {business_key, "default"}:
+                    continue
+            sections.setdefault(section.filename, []).append(section)
 
-            display = parse_bool(row.get("display", "true"))
-            if not display:
-                continue
-
-            try:
-                order_value = int(row.get("order", "999"))
-            except ValueError:
-                order_value = 999
-
-            block = ContentBlock(
-                page=(row.get("page") or "").strip(),
-                section=(row.get("section") or "").strip(),
-                title=(row.get("title") or "").strip(),
-                subtitle=(row.get("subtitle") or "").strip(),
-                content=row.get("content") or "",
-                image=(row.get("image") or "").strip(),
-                display=True,
-                order=order_value,
-                content_type=(row.get("content_type") or "").strip(),
-                filename=(row.get("filename") or "").strip(),
-            )
-            blocks.append(block)
-    return blocks
+    for filename in sections:
+        sections[filename].sort(key=lambda item: (item.order, item.section))
+    return sections
 
 
-def group_blocks_by_page(blocks: Iterable[ContentBlock]) -> Dict[str, List[ContentBlock]]:
-    grouped: Dict[str, List[ContentBlock]] = {}
-    for block in blocks:
-        if not block.page:
-            continue
-        grouped.setdefault(block.page, []).append(block)
-    for items in grouped.values():
-        items.sort()
-    return grouped
+def serialize_sections(sections: Dict[str, List[Section]], json_path: Path) -> None:
+    payload = {
+        filename: [asdict(section) for section in section_list]
+        for filename, section_list in sections.items()
+    }
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-def ensure_image_placeholders(page: str, blocks: List[ContentBlock], max_slots: int) -> None:
-    image_blocks = [b for b in blocks if b.content_type in IMAGE_CONTENT_TYPES]
-    if not image_blocks:
-        return
-
-    needed = max(0, max_slots - len(image_blocks))
-    if needed == 0:
-        return
-
-    starting_order = (blocks[-1].order if blocks else 0) + 1
-    for index in range(needed):
-        placeholder = ContentBlock(
-            page=page,
-            section=f"placeholder-{index + 1}",
-            title="",
-            subtitle="",
-            content="",
-            image="",
-            display=True,
-            order=starting_order + index,
-            content_type="image-placeholder",
-            filename=f"{page}.html",
-        )
-        blocks.append(placeholder)
-    blocks.sort()
+def render_sections_html(sections: Iterable[Section]) -> str:
+    rendered: List[str] = []
+    for section in sections:
+        renderer = SECTION_RENDERERS.get(section.content_type, render_text_section)
+        rendered.append(renderer(section))
+    return "\n".join(rendered)
 
 
-def render_block(block: ContentBlock) -> str:
-    section_id = block.section or block.content_type or "section"
-    classes = ["content-block", f"content-block--{block.content_type or 'default'}"]
-    html_parts = [f'<section id="{section_id}" class="{" ".join(classes)}">']
+def render_page(filename: str, sections: Iterable[Section]) -> str:
+    sections_list = list(sections)
+    if not sections_list:
+        return ""
+    page_key = filename.lower()
+    custom_title = DEFAULT_PAGE_TITLES.get(page_key)
+    if not custom_title:
+        page_stub = page_key.split(".")[0].replace("-", " ").title()
+        custom_title = f"Kabalen – {page_stub}"
 
-    if block.title:
-        html_parts.append(f"  <h2>{html.escape(block.title)}</h2>")
-    if block.subtitle:
-        html_parts.append(f"  <h3>{html.escape(block.subtitle)}</h3>")
+    body_html = render_sections_html(sections_list)
 
-    if block.image:
-        html_parts.append(
-            "  <figure>"
-            f"<img src=\"{html.escape(block.image)}\" alt=\"{html.escape(block.title or block.section or 'Kabalen dish')}\">"
-            "</figure>"
-        )
-    elif block.content_type == "image-placeholder":
-        html_parts.append(
-            "  <figure class=\"placeholder\">"
-            "<div class=\"placeholder__frame\" aria-hidden=\"true\"></div>"
-            "</figure>"
-        )
-
-    if block.content:
-        paragraphs = [p.strip() for p in block.content.split("\n\n") if p.strip()]
-        for paragraph in paragraphs:
-            html_parts.append(f"  <p>{html.escape(paragraph)}</p>")
-
-    html_parts.append("</section>")
-    return "\n".join(html_parts)
-
-
-def render_page_html(page: str, blocks: List[ContentBlock]) -> str:
-    body_sections = "\n\n".join(render_block(block) for block in blocks)
-    return (
-        "<!DOCTYPE html>\n"
-        "<html lang=\"en\">\n"
-        "<head>\n"
-        "  <meta charset=\"UTF-8\">\n"
-        "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-        f"  <title>Kabalen Toronto — {html.escape(page.title())}</title>\n"
-        "  <link rel=\"stylesheet\" href=\"assets/css/style.css\">\n"
-        "</head>\n"
-        "<body>\n"
-        f"  <main id=\"{html.escape(page)}\">\n"
-        f"{body_sections}\n"
-        "  </main>\n"
-        "</body>\n"
-        "</html>\n"
+    nav_links = " ".join(
+        f'<a href="{href}">{label}</a>' for href, label in NAVIGATION_LINKS
     )
 
+    firebase_script = '<script type="module" src="assets/js/firebase-init.js"></script>'
 
-def write_page(output_dir: Path, filename: str, html_content: str) -> None:
-    target = output_dir / filename
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(html_content, encoding="utf-8")
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{custom_title}</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header>
+    <img src="assets/images/kabalen-logo.png" alt="Kabalen Logo" class="logo">
+    <nav>{nav_links}</nav>
+</header>
+{body_html}
+<footer>
+    <p>© 2025 Kabalen Toronto. All rights reserved.</p>
+</footer>
+{firebase_script}
+</body>
+</html>
+"""
 
 
-def generate_pages(csv_path: Path, output_dir: Path, max_image_slots: int) -> None:
-    blocks = load_blocks(csv_path)
-    grouped = group_blocks_by_page(blocks)
-
-    for page, page_blocks in grouped.items():
-        ensure_image_placeholders(page, page_blocks, max_image_slots)
-        filename = page_blocks[0].filename if page_blocks else f"{page}.html"
-        html_content = render_page_html(page, page_blocks)
-        write_page(output_dir, filename, html_content)
-        print(f"Generated {filename} with {len(page_blocks)} sections.")
-
-
-def build_argument_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Generate static HTML pages for Kabalen from a CSV content source.",
+def render_hero_section(section: Section) -> str:
+    image_html = (
+        f'<img src="{section.image}" alt="{section.title or section.section}">' if section.image else ""
     )
-    parser.add_argument(
-        "csv",
-        nargs="?",
-        default="content/content-template.csv",
-        type=Path,
-        help="Path to the CSV file containing content definitions.",
+    subtitle_html = f"<p>{section.subtitle}</p>" if section.subtitle else ""
+    content_html = f"<p>{section.content}</p>" if section.content else ""
+    return f"""
+<section class="hero">
+    {image_html}
+    <div class="hero-text">
+        <h1>{section.title or 'Welcome to Kabalen'}</h1>
+        {subtitle_html}
+        {content_html}
+    </div>
+</section>
+"""
+
+
+def render_callout_section(section: Section) -> str:
+    content_html = f"<p>{section.content}</p>" if section.content else ""
+    button_label = section.title or "Learn More"
+    return f"""
+<section class="cta">
+    <h2>{button_label}</h2>
+    {content_html}
+</section>
+"""
+
+
+def render_card_section(section: Section) -> str:
+    image_html = (
+        f'<img src="{section.image}" alt="{section.title}">' if section.image else ""
     )
-    parser.add_argument(
-        "--output",
-        default="generated-pages",
-        type=Path,
-        help="Directory where generated HTML files will be written.",
+    subtitle_html = f"<p>{section.subtitle}</p>" if section.subtitle else ""
+    content_html = f"<p>{section.content}</p>" if section.content else ""
+    return f"""
+<section class="card">
+    {image_html}
+    <h3>{section.title}</h3>
+    {subtitle_html}
+    {content_html}
+</section>
+"""
+
+
+def render_gallery_section(section: Section) -> str:
+    image_html = (
+        f'<img src="{section.image}" alt="{section.title or section.section}">' if section.image else ""
     )
-    parser.add_argument(
-        "--max-image-slots",
-        default=10,
-        type=int,
-        help="Maximum number of image slots per page (placeholders will be added if fewer exist).",
-    )
-    return parser
+    caption_title = section.title or "Gallery Highlight"
+    caption_body = section.content or section.subtitle
+    caption_html = f"<figcaption><p>{caption_body}</p></figcaption>" if caption_body else ""
+    return f"""
+<section class="gallery-item">
+    <figure>
+        {image_html}
+        <figcaption><h3>{caption_title}</h3>{caption_html}</figcaption>
+    </figure>
+</section>
+"""
+
+
+def render_text_section(section: Section) -> str:
+    subtitle_html = f"<h3>{section.subtitle}</h3>" if section.subtitle else ""
+    content_html = f"<p>{section.content}</p>" if section.content else ""
+    return f"""
+<section class="text-block">
+    <h2>{section.title or section.section.title()}</h2>
+    {subtitle_html}
+    {content_html}
+</section>
+"""
+
+
+SECTION_RENDERERS = {
+    "hero": render_hero_section,
+    "callout": render_callout_section,
+    "card": render_card_section,
+    "gallery-item": render_gallery_section,
+    "gallery": render_gallery_section,
+    "text": render_text_section,
+}
+
+
+def build_html_pages(sections: Dict[str, List[Section]], output_dir: Path) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for filename, section_list in sections.items():
+        html = render_page(filename, section_list)
+        (output_dir / filename).write_text(html, encoding="utf-8")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Generate static pages and JSON from CSV content.")
+    parser.add_argument("csv_path", type=Path, help="Path to the content CSV file.")
+    parser.add_argument("--output", type=Path, default=Path("generated-pages"), help="Directory for generated HTML files.")
+    parser.add_argument("--json", type=Path, default=Path("build/content.json"), help="Path for aggregated JSON output.")
+    parser.add_argument("--business", type=str, default=None, help="Filter rows to a specific business identifier.")
+    return parser.parse_args()
 
 
 def main() -> None:
-    parser = build_argument_parser()
-    args = parser.parse_args()
+    args = parse_args()
+    sections = parse_sections(args.csv_path, business=args.business)
+    if not sections:
+        raise SystemExit("No visible rows found in the CSV. Nothing to generate.")
 
-    if not args.csv.exists():
-        raise FileNotFoundError(f"CSV file not found: {args.csv}")
-
-    generate_pages(args.csv, args.output, args.max_image_slots)
+    serialize_sections(sections, args.json)
+    build_html_pages(sections, args.output)
 
 
 if __name__ == "__main__":

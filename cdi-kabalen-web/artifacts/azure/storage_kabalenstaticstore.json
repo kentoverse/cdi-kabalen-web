@@ -1,0 +1,36 @@
+{
+    "apiVersion": "2023-01-01",
+    "id": "/subscriptions/17564e57-40b0-434d-b566-604c60cee028/resourceGroups/BOTWORKS-MCP/providers/Microsoft.Storage/storageAccounts/kabalenstaticstore",
+    "name": "kabalenstaticstore",
+    "type": "microsoft.storage/storageaccounts",
+    "location": "canadaeast",
+    "kind": "StorageV2",
+    "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+    },
+    "properties": {
+        "primaryEndpoints": {
+            "blob": "https://kabalenstaticstore.blob.core.windows.net/",
+            "dfs": "https://kabalenstaticstore.dfs.core.windows.net/",
+            "file": "https://kabalenstaticstore.file.core.windows.net/",
+            "queue": "https://kabalenstaticstore.queue.core.windows.net/",
+            "table": "https://kabalenstaticstore.table.core.windows.net/",
+            "web": "https://kabalenstaticstore.z13.web.core.windows.net/"
+        },
+        "primaryLocation": "canadaeast",
+        "statusOfPrimary": "available",
+        "enableHttpsTrafficOnly": true,
+        "allowBlobPublicAccess": false,
+        "minimumTlsVersion": "TLS1_2",
+        "allowSharedKeyAccess": true,
+        "accessTier": "Hot",
+        "largeFileSharesState": "Disabled",
+        "allowCrossTenantReplication": true,
+        "allowSharedKeyAccessBlobsOnly": false
+    },
+    "tags": {
+        "workload": "kabalen",
+        "environment": "prod"
+    }
+}

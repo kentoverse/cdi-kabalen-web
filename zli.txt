@@ -5,9 +5,7 @@ git add .
 git commit -m "Initial CDI Kabalen Web commit"
 git push -u cdi-origin main
 
-git add .
-git commit -m "CDI Kabalen Web commit"
-git push -u cdi-origin main
+
 
 
 az webapp config set \
@@ -385,3 +383,41 @@ document.getElementById("contactForm").addEventListener("submit", function (e) {
 EOF
 
 echo "Kabalen CDI website generated successfully!"
+
+
+
+
+
+az storage blob list \
+  --auth-mode-login
+  --account-name kabalenstaticstore \
+  --container-name '$web' \
+  --output table 
+
+
+
+
+
+git remote add cdi-origin https://github.com/kentoverse/cdi-kabalen-web.git
+git add .
+git commit -m "Initial CDI Kabalen Web commit"
+git push -u cdi-origin main
+
+
+
+
+  cdi-kabalen-web az storage blob upload-batch \
+  --account-name kabalenstaticstore \
+  --auth-mode login \
+  -s . \
+  -d '$web' \
+  --overwrite
+
+
+
+  cdi-kabalen-web % az storage blob upload \
+  --account-name kabalenstaticstore \
+  --auth-mode login \
+  --container-name '$web' \
+  --file index.html \
+  --name index.ht
