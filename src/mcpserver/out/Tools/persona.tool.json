@@ -1,0 +1,19 @@
+{
+  "name": "personaAnalysis",
+  "description": "Generate an AI response using a selected persona style (optimistic, pessimistic, neutral).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "description": "The user's question or message."
+      },
+      "persona": {
+        "type": "string",
+        "enum": ["optimistic", "pessimistic", "neutral"],
+        "description": "The persona style to use."
+      }
+    },
+    "required": ["query", "persona"]
+  }
+}

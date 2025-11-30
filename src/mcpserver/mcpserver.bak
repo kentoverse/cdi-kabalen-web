@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+[
+  {
+    "log_time": "2025-11-30T01:42:25.7409755Z",
+    "id": "d0b9d900-371b-4ae5-8235-cfdd8348b231",
+    "message": "Updating submodules.",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:42:27.090538Z",
+    "id": "64fc7c6c-52d8-455f-9887-f29b2144ced2",
+    "message": "Preparing deployment for commit id '4c41a4c6-e'.",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:42:27.9145028Z",
+    "id": "1d0fa85d-ff3a-4ec1-a056-12fa60fbf98a",
+    "message": "PreDeployment: context.CleanOutputPath False",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:42:28.5443958Z",
+    "id": "75602775-00d0-41cd-9d91-61550045b1f6",
+    "message": "PreDeployment: context.OutputPath /home/site/wwwroot",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:42:29.4912528Z",
+    "id": "1b39aa34-22a7-4f23-8628-ead38a3061f1",
+    "message": "Repository path is /tmp/zipdeploy/extracted",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:42:30.0413816Z",
+    "id": "253d4805-fb53-4151-abf4-85f01feba1c7",
+    "message": "Running oryx build...",
+    "type": 2,
+    "details_url": "https://appi-mcp-s3d6qmutzsu2w.scm.azurewebsites.net/deployments/4c41a4c6-e6c6-4ca5-bd4b-323114a762d6/log/253d4805-fb53-4151-abf4-85f01feba1c7"
+  },
+  {
+    "log_time": "2025-11-30T01:43:26.5050724Z",
+    "id": "8b221bab-4350-43f1-8247-e1a7ee597fcd",
+    "message": "",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:26.9408007Z",
+    "id": "b1dba2db-ca3c-461b-9573-9b1b32879cfe",
+    "message": "Generating summary of Oryx build",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:27.3384655Z",
+    "id": "b7f80627-e3f6-4461-bb8f-36673a729018",
+    "message": "Parsing the build logs",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:27.8398739Z",
+    "id": "3e367342-1a6a-46fd-a5e5-6cb0a225e9c5",
+    "message": "Found 1 issue(s)",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:28.3695446Z",
+    "id": "d38863e0-6563-48b8-909e-2fc4ed8f65ad",
+    "message": "",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:28.7587991Z",
+    "id": "2457da19-1c48-4d77-9852-b680412aad79",
+    "message": "Build Summary :",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:29.2037851Z",
+    "id": "c66196f3-c4ae-4363-9b70-eb7c1756506b",
+    "message": "===============",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:29.5761525Z",
+    "id": "2ff14816-d3d4-46d0-a094-e85cae319570",
+    "message": "Errors (1)",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:30.1698865Z",
+    "id": "3878e716-7b09-44c2-8271-2220c138f10f",
+    "message": "1.   Determining projects to restore...\\n/tmp/oryx/platforms/dotnet/8.0.415/sdk/8.0.415/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets(166,5): error NETSDK1045: The current .NET SDK does not support targeting .NET 9.0.  Either target .NET 8.0 or lower, or use a version of the .NET SDK that supports .NET 9.0. Download the .NET SDK from https://aka.ms/dotnet/download [/tmp/8de2fb1b7ec667b/mcpserver.csproj]  ",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:30.5692064Z",
+    "id": "9b8cd79f-bf52-4199-b806-69365af70747",
+    "message": "-  Next Steps: Please build your app locally before publishing.",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:30.957162Z",
+    "id": "0b1cb1e4-8c4b-49b5-9167-83b89ec0271f",
+    "message": "-  For more details you can browse to https://docs.microsoft.com/en-us/azure/app-service/configure-language-dotnetcore?pivots=platform-linux",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:31.3818407Z",
+    "id": "fd7ee9fb-a7e4-4918-bb7a-9d20f89dcfc4",
+    "message": "",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:31.8368254Z",
+    "id": "79672905-b7f0-4fe8-8659-02ff0f8dbaeb",
+    "message": "Warnings (0)",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:32.1353952Z",
+    "id": "319c18e1-59a8-47cc-b9b3-4c2f8974f880",
+    "message": "",
+    "type": 0,
+    "details_url": null
+  },
+  {
+    "log_time": "2025-11-30T01:43:33.6012047Z",
+    "id": "9437579e-109e-4fbf-b099-f60d8c9633c4",
+    "message": "Deployment Failed. deployer = Push-Deployer deploymentPath = ZipDeploy. Extract zip. Remote build.",
+    "type": 0,
+    "details_url": null
+  }
+]
+
+  <ItemGroup>
+    <PackageReference Include="ModelContextprotocol.aspnetcore" Version="0.1.0-preview.8" />
+  </ItemGroup>
+
+</Project>
