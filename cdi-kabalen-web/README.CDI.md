@@ -102,6 +102,12 @@ The static website is hosted on **Azure Storage Static Web Hosting**.
 
 🔗 [kabalenstaticstore.z27.web.core.windows.net](https://kabalenstaticstore.z27.web.core.windows.net/)
 
+#### Latest Production Sync
+
+- **Deployed:** Nov 30, 2025 @ 11:46 UTC via `scripts/build_variants.py` + `scripts/deploy_to_storage.sh`
+- **Bundle:** `build/azure/kabalian`
+- **Verification:** `curl -I https://kabalenstaticstore.z27.web.core.windows.net/` → `HTTP/1.1 200`
+
 ### 📁 Project Structure
 
 ```text
@@ -154,6 +160,16 @@ After grading, the project may expand into:
 - BOTWorks app integration
 
 These enhancements are future learning goals, not part of the CDI submission.
+
+---
+
+## 🆕 Latest Development Snapshot (Nov 30, 2025)
+
+- **Repository Sync:** `main` branch pushed to both `origin` and `cdi-origin`.
+- **Static Bundles:** Regenerated Azure/GCP artifacts with `python3 scripts/build_variants.py --business kabalian`.
+- **Azure Publish:** Synced `build/azure/kabalian` to Azure Storage using `CONTENT_BUSINESS=kabalian ./scripts/deploy_to_storage.sh`.
+- **Validation:** Confirmed deployment with `curl -I https://kabalenstaticstore.z27.web.core.windows.net/` (HTTP 200).
+- **Pending Artifact:** `final-project.zip` remains local for future packaging; excluded from commits and deploys.
 
 ---
 
@@ -315,18 +331,21 @@ The upcoming build focuses on turning the CSV authoring workflow into a repeatab
 - Ship a FastAPI microservice that reads the CSV and serves JSON endpoints for each page.
 - Add a build script that transforms CSV → JSON → Static HTML so non-technical editors only touch `content/content-template.csv`.
 - Automate Azure Blob deployments by bundling the generator run and `az storage blob upload-batch` commands into a single task.
+- Stand up a GitHub Actions workflow that runs the generator, executes `deploy_to_storage.sh` with federated credentials, and (optionally) triggers Firebase hosting sync.
+- Add a lightweight uptime probe (scheduled workflow or Azure Function) that records the live site `Last-Modified` header for monitoring.
 
 ### Deliverables
 
 - `/api` folder with FastAPI app, Pydantic models, and CSV adapter.
 - `package.json` or `pyproject.toml` entries to run `python3 generate_pages.py` before deployment.
-- Updated GitHub Actions (or local script) that publishes generated HTML to `$web` and invalidates cached assets if needed.
+- GitHub Actions workflow artifacts that publish generated HTML to `$web`, invalidate cached assets if needed, and capture deployment metadata.
 
 ### Acceptance Criteria
 
 - Running one command should regenerate HTML, produce JSON previews, and push to Azure when credentials are provided.
 - Documentation includes a flow diagram showing CSV editors how updates propagate to production.
 - Tests cover CSV parsing edge cases (missing columns, hidden sections, image placeholders).
+- CI pipeline posts deployment success/failure status and persists the latest live URL/etag in the workflow summary.
 
 This plan keeps the CSV-first governance intact while laying the groundwork for a FastAPI-powered CMS experience.
 
