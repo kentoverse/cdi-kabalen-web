@@ -1,0 +1,131 @@
+{
+  "index.html": [
+    {
+      "business": "kabalian",
+      "page": "index",
+      "section": "hero",
+      "title": "Authentic Filipino Cuisine in Toronto",
+      "subtitle": "A taste of Pampanga — the Culinary Capital of the Philippines.",
+      "content": "Experience Kamayan feasts, sizzling platters, and homestyle Kapampangan dishes crafted fresh every day.",
+      "image": "assets/images/hero.jpg",
+      "display": true,
+      "order": 1,
+      "content_type": "hero",
+      "filename": "index.html"
+    },
+    {
+      "business": "kabalian",
+      "page": "index",
+      "section": "intro",
+      "title": "Welcome to Kabalen Toronto",
+      "subtitle": "",
+      "content": "Experience traditional Filipino dishes, Kamayan feasts, and homestyle Kapampangan flavors. Our menu is crafted from family recipes passed down for generations.",
+      "image": "",
+      "display": true,
+      "order": 2,
+      "content_type": "intro",
+      "filename": "index.html"
+    },
+    {
+      "business": "kabalian",
+      "page": "index",
+      "section": "cta",
+      "title": "Book a Table",
+      "subtitle": "",
+      "content": "Reserve your Kamayan feast or family dinner with our online reservation form.",
+      "image": "",
+      "display": true,
+      "order": 3,
+      "content_type": "callout",
+      "filename": "index.html"
+    }
+  ],
+  "menu.html": [
+    {
+      "business": "kabalian",
+      "page": "menu",
+      "section": "featured",
+      "title": "Chef Specials",
+      "subtitle": "",
+      "content": "Seasonal dishes sourced from local markets, featuring grilled seafood and sizzling platters.",
+      "image": "",
+      "display": true,
+      "order": 1,
+      "content_type": "card",
+      "filename": "menu.html"
+    },
+    {
+      "business": "kabalian",
+      "page": "menu",
+      "section": "classic",
+      "title": "Classic Favorites",
+      "subtitle": "",
+      "content": "Enjoy adobo, kare-kare, sisig, and more timeless Filipino favorites, made from scratch daily.",
+      "image": "",
+      "display": true,
+      "order": 2,
+      "content_type": "card",
+      "filename": "menu.html"
+    }
+  ],
+  "specials.html": [
+    {
+      "business": "kabalian",
+      "page": "specials",
+      "section": "daily",
+      "title": "Today’s Feature",
+      "subtitle": "",
+      "content": "Ask about our rotating turo-turo trays packed with freshly prepared viands and desserts.",
+      "image": "",
+      "display": true,
+      "order": 1,
+      "content_type": "card",
+      "filename": "specials.html"
+    }
+  ],
+  "gallery.html": [
+    {
+      "business": "kabalian",
+      "page": "gallery",
+      "section": "kamayan",
+      "title": "Kamayan Feast Highlights",
+      "subtitle": "",
+      "content": "Feast with friends and family — no utensils required for this communal dining experience.",
+      "image": "assets/images/hero-web.jpg",
+      "display": true,
+      "order": 1,
+      "content_type": "gallery-item",
+      "filename": "gallery.html"
+    }
+  ],
+  "about.html": [
+    {
+      "business": "kabalian",
+      "page": "about",
+      "section": "story",
+      "title": "Our Story",
+      "subtitle": "",
+      "content": "Kabalen brings Pampanga’s culinary heritage to Bathurst & Wilson, celebrating Filipino hospitality.",
+      "image": "",
+      "display": true,
+      "order": 1,
+      "content_type": "text",
+      "filename": "about.html"
+    }
+  ],
+  "contact.html": [
+    {
+      "business": "kabalian",
+      "page": "contact",
+      "section": "visit",
+      "title": "Visit Us",
+      "subtitle": "",
+      "content": "We’re open daily with extended weekend hours for Kamayan dinners and private celebrations.",
+      "image": "",
+      "display": true,
+      "order": 1,
+      "content_type": "text",
+      "filename": "contact.html"
+    }
+  ]
+}

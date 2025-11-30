@@ -244,6 +244,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=Path("generated-pages"), help="Directory for generated HTML files.")
     parser.add_argument("--json", type=Path, default=Path("build/content.json"), help="Path for aggregated JSON output.")
     parser.add_argument("--business", type=str, default=None, help="Filter rows to a specific business identifier.")
+    parser.add_argument(
+        "--no-html",
+        action="store_true",
+        help="Skip generating HTML output (useful when exporting JSON for developer tooling).",
+    )
     return parser.parse_args()
 
 
@@ -254,7 +259,8 @@ def main() -> None:
         raise SystemExit("No visible rows found in the CSV. Nothing to generate.")
 
     serialize_sections(sections, args.json)
-    build_html_pages(sections, args.output)
+    if not args.no_html:
+        build_html_pages(sections, args.output)
 
 
 if __name__ == "__main__":

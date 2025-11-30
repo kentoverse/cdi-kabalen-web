@@ -1,6 +1,7 @@
 business,page,section,title,subtitle,content,image,display,order,content_type,filename
-kabalian,index,hero,Experience Kabalen,Authentic Filipino Cuisine,"Indulge in home-style Filipino cooking, Kamayan feasts, and regional specialties prepared daily.",assets/images/hero.jpg,true,1,hero,index.html
-kabalian,index,cta,Book a Table,,"Reserve your Kamayan feast or family dinner with our online reservation form.",,true,2,callout,index.html
+kabalian,index,hero,Authentic Filipino Cuisine in Toronto,"A taste of Pampanga — the Culinary Capital of the Philippines.","Experience Kamayan feasts, sizzling platters, and homestyle Kapampangan dishes crafted fresh every day.",assets/images/hero.jpg,true,1,hero,index.html
+kabalian,index,intro,Welcome to Kabalen Toronto,,"Experience traditional Filipino dishes, Kamayan feasts, and homestyle Kapampangan flavors. Our menu is crafted from family recipes passed down for generations.",,true,2,intro,index.html
+kabalian,index,cta,Book a Table,,"Reserve your Kamayan feast or family dinner with our online reservation form.",,true,3,callout,index.html
 kabalian,menu,featured,Chef Specials,,"Seasonal dishes sourced from local markets, featuring grilled seafood and sizzling platters.",,true,1,card,menu.html
 kabalian,menu,classic,Classic Favorites,,"Enjoy adobo, kare-kare, sisig, and more timeless Filipino favorites, made from scratch daily.",,true,2,card,menu.html
 kabalian,specials,daily,Today’s Feature,,"Ask about our rotating turo-turo trays packed with freshly prepared viands and desserts.",,true,1,card,specials.html

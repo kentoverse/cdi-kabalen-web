@@ -209,6 +209,22 @@ The next evolution of the Kabalen site introduces a CSV-powered content flow so 
 
 - Generated HTML bundles land under `build/azure/<business>` and `build/gcp/<business>` and contain `content.json` plus the copied `assets/` directory.
 
+### Exporting JSON for Developers
+
+- Non-technical editors continue working in the CSV, while developers can export a structured JSON snapshot without regenerating HTML:
+
+  ```bash
+  python3 generate_pages.py content/content-template.csv --business kabalian --json content/content-template.json --no-html
+  ```
+
+- The resulting `content/content-template.json` mirrors the CSV structure and can be consumed by local tools, the FastAPI service, or automated tests.
+
+- Prefer a one-liner? Run the helper script (it wraps the command above and keeps defaults consistent):
+
+  ```bash
+  python3 scripts/export_content_json.py --business kabalian
+  ```
+
 ### Image Slot Placeholders
 
 - Pages with gallery-style content auto-fill up to 10 image slots.
