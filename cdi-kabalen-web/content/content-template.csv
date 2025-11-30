@@ -1,0 +1,3 @@
+page,section,title,subtitle,content,image,display,order,content_type,filename
+index,hero,"Welcome to Kabalen","Authentic Filipino flavors in Toronto","Introduce the restaurant and highlight key offerings.","assets/images/hero.jpg",true,1,hero,index.html
+menu,signature-dishes,"Signature Dishes","Customer favorites","Describe the most popular dishes with short descriptions.","assets/images/signature-1.jpg",true,1,card,menu.html
