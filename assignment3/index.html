@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assignment 3 – Marc Cavdada</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Assignment 3 | Layouts • Forms • Media • Interactivity</h1>
+    <nav>
+      <a href="#layout">Layout</a>
+      <a href="#forms">Forms</a>
+      <a href="#media">Media</a>
+      <a href="#social">Social</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="layout">
+      <h2>Responsive Layout Demo</h2>
+      <div class="grid-container">
+        <div class="grid-item">HTML5 Semantic Layout</div>
+        <div class="grid-item">Flexbox Section</div>
+        <div class="grid-item">Grid Section</div>
+      </div>
+    </section>
+
+    <section id="forms">
+      <h2>Contact Form</h2>
+      <form id="contactForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required />
+        <label for="email">Email:</label>
+        <input type="email" id="email" required />
+        <input type="submit" value="Send" />
+      </form>
+    </section>
+
+    <section id="media">
+      <h2>Multimedia Showcase</h2>
+      <audio controls>
+        <source src="audio/sample.mp3" type="audio/mpeg" />
+      </audio>
+      <video controls width="400">
+        <source src="video/sample.mp4" type="video/mp4" />
+      </video>
+    </section>
+
+    <section id="social">
+      <h2>Social & Interactivity</h2>
+      <button id="alertBtn">Click Me</button>
+      <div class="icons">
+        <a href="https://github.com/kentoverse" target="_blank">🐙 GitHub</a>
+        <a href="https://linkedin.com" target="_blank">💼 LinkedIn</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Marc Cavdada – Assignment 3</p>
+  </footer>
+</body>
+</html>
