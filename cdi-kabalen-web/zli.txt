@@ -1,0 +1,423 @@
+
+git init
+git remote add cdi-origin https://github.com/yourkentoverse/cdi-kabalen-web.git
+git add .
+git commit -m "Initial CDI Kabalen Web commit"
+git push -u cdi-origin main
+
+
+
+
+az webapp config set \
+  --resource-group BOTWORKS-MCP \
+  --name kabalen-fastapi \
+  --startup-file "uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+
+
+  # Create project root
+mkdir -p cdi-kabalen-web/assets/css
+mkdir -p cdi-kabalen-web/assets/js
+mkdir -p cdi-kabalen-web/assets/images
+
+# ------------------------------
+# index.html
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kabalen Toronto – Home</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+    <img src="assets/images/kabalen-logo.png" alt="Kabalen Logo" class="logo">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="specials.html">Specials</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <img src="assets/images/hero.jpg" alt="Kabalen Food">
+    <div class="hero-text">
+        <h1>Authentic Filipino Cuisine in Toronto</h1>
+        <p>A taste of Pampanga — the Culinary Capital of the Philippines.</p>
+    </div>
+</section>
+
+<section class="intro">
+    <h2>Welcome to Kabalen Toronto</h2>
+    <p>
+        Experience traditional Filipino dishes, Kamayan feasts, and homestyle Kapampangan flavors.  
+        Our menu is crafted from family recipes passed down for generations.
+    </p>
+</section>
+
+<footer>
+    <p>© 2025 Kabalen Toronto. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+EOF
+
+# ------------------------------
+# menu.html
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/menu.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kabalen – Menu</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+<header>
+    <img src="assets/images/kabalen-logo.png" class="logo" alt="Kabalen Logo">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="specials.html">Specials</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section class="page-header">
+    <h1>Our Menu</h1>
+    <p>Authentic Filipino comfort food — cooked fresh daily.</p>
+</section>
+
+<section class="grid">
+    <div class="card">
+        <img src="assets/images/menu-1.jpg" alt="">
+        <h3>Sisig</h3>
+        <p>Chopped pork belly, onions, chilies. Served sizzling.</p>
+        <span class="price">$14.99</span>
+    </div>
+
+    <div class="card">
+        <img src="assets/images/menu-2.jpg" alt="">
+        <h3>Kare-Kare</h3>
+        <p>Oxtail, vegetables & peanut sauce. Served with bagoong.</p>
+        <span class="price">$18.99</span>
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 Kabalen Toronto</p>
+</footer>
+
+</body>
+</html>
+EOF
+
+# ------------------------------
+# specials.html
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/specials.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Specials – Kabalen</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header>
+    <img src="assets/images/kabalen-logo.png" class="logo">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="specials.html" class="active">Specials</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section class="page-header">
+    <h1>Daily Specials</h1>
+    <p>Freshly cooked dishes available for a limited time.</p>
+</section>
+
+<section class="feed">
+    <article class="special-item">
+        <img src="assets/images/special-1.jpg">
+        <div>
+            <h3>Bicol Express</h3>
+            <p>Spicy pork cooked in coconut milk and chili peppers.</p>
+            <span>$12.99</span>
+        </div>
+    </article>
+</section>
+
+<footer><p>© 2025 Kabalen Toronto</p></footer>
+</body>
+</html>
+EOF
+
+# ------------------------------
+# gallery.html
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/gallery.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Kabalen Gallery</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+    <img src="assets/images/kabalen-logo.png" class="logo">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="specials.html">Specials</a>
+        <a href="gallery.html" class="active">Gallery</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section class="page-header">
+    <h1>Gallery</h1>
+</section>
+
+<section class="gallery-grid">
+    <img src="assets/images/gallery-1.jpg">
+    <img src="assets/images/gallery-2.jpg">
+    <img src="assets/images/gallery-3.jpg">
+    <img src="assets/images/gallery-4.jpg">
+</section>
+
+<footer><p>© 2025 Kabalen Toronto</p></footer>
+</body>
+</html>
+EOF
+
+# ------------------------------
+# about.html
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/about.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>About Kabalen</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+<header>
+    <img src="assets/images/kabalen-logo.png" class="logo">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="specials.html">Specials</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html" class="active">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section class="page-header"><h1>Our Story</h1></section>
+
+<section class="about">
+    <p>Kabalen Toronto celebrates the flavors of Pampanga — the Culinary Capital of the Philippines.</p>
+    <p>We bring traditional Filipino dishes and Kamayan dining to the heart of Toronto.</p>
+</section>
+
+<footer><p>© 2025 Kabalen Toronto</p></footer>
+
+</body>
+</html>
+EOF
+
+# ------------------------------
+# contact.html
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/contact.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Kabalen</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script defer src="assets/js/form.js"></script>
+</head>
+
+<body>
+
+<header>
+    <img src="assets/images/kabalen-logo.png" class="logo">
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="specials.html">Specials</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" class="active">Contact</a>
+    </nav>
+</header>
+
+<section class="page-header"><h1>Contact & Reservations</h1></section>
+
+<section class="form-section">
+    <form id="contactForm">
+        <label>Name</label>
+        <input type="text" id="name" required>
+
+        <label>Email</label>
+        <input type="email" id="email" required>
+
+        <label>Message</label>
+        <textarea id="message" required></textarea>
+
+        <button type="submit">Send</button>
+    </form>
+    <p id="formStatus"></p>
+</section>
+
+<footer><p>© 2025 Kabalen Toronto</p></footer>
+
+</body>
+</html>
+EOF
+
+# ------------------------------
+# CSS file
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/assets/css/style.css
+/* Basic Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background: #fafafa; color: #333; }
+
+/* Header */
+header { 
+    background: #800000; 
+    color: #fff; 
+    padding: 15px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+header nav a {
+    color: #fff;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Hero */
+.hero img { width: 100%; height: 300px; object-fit: cover; }
+.hero-text { position: relative; top: -120px; padding: 20px; color: #fff; }
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+.card { background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 0 5px #ccc; }
+.card img { width: 100%; border-radius: 5px; }
+.price { font-weight: bold; }
+
+/* Specials Feed */
+.feed { padding: 20px; }
+.special-item { display: flex; margin-bottom: 20px; }
+.special-item img { width:120px; height:120px; object-fit: cover; margin-right: 15px; }
+
+/* Gallery */
+.gallery-grid { 
+    padding: 20px; 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+.gallery-grid img { width:100%; border-radius:5px; }
+
+/* Contact Form */
+form { display:flex; flex-direction:column; width:300px; margin:auto; }
+form input, form textarea { margin-bottom:10px; padding:10px; border:1px solid #ccc; border-radius:5px; }
+button { padding:10px; background:#800000; color:#fff; border:none; border-radius:5px; cursor:pointer; }
+
+/* Footer */
+footer { text-align:center; padding:15px; background:#eee; margin-top:20px; }
+EOF
+
+# ------------------------------
+# JS file
+# ------------------------------
+cat << 'EOF' > cdi-kabalen-web/assets/js/form.js
+document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const msg = document.getElementById("message").value.trim();
+
+    if (!name || !email || !msg) {
+        document.getElementById("formStatus").innerText = "All fields are required.";
+        return;
+    }
+
+    document.getElementById("formStatus").innerText = "Message sent!";
+});
+EOF
+
+echo "Kabalen CDI website generated successfully!"
+
+
+
+
+
+az storage blob list \
+  --auth-mode-login
+  --account-name kabalenstaticstore \
+  --container-name '$web' \
+  --output table 
+
+
+
+
+
+git remote add cdi-origin https://github.com/kentoverse/cdi-kabalen-web.git
+git add .
+git commit -m "Initial CDI Kabalen Web commit"
+git push -u cdi-origin main
+
+
+
+
+  cdi-kabalen-web az storage blob upload-batch \
+  --account-name kabalenstaticstore \
+  --auth-mode login \
+  -s . \
+  -d '$web' \
+  --overwrite
+
+
+
+  cdi-kabalen-web % az storage blob upload \
+  --account-name kabalenstaticstore \
+  --auth-mode login \
+  --container-name '$web' \
+  --file index.html \
+  --name index.ht
